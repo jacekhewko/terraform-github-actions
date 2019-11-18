@@ -1,5 +1,5 @@
-name: 'Terraform GitHub Actions'
-description: 'Runs Terraform commands via GitHub Actions.'
+name: 'Terragrunt GitHub Actions'
+description: 'Wraps Terragrunt commands on HashiCorp's GitHub Actions.'
 author: 'HashiCorp, Inc. Terraform Team <terraform@hashicorp.com>'
 branding:
   icon: 'terminal'
@@ -8,11 +8,14 @@ inputs:
   tf_actions_version:
     description: 'Terraform version to install.'
     required: true
+  tg_actions_version:
+    description: 'Terragrunt version to install.'
+    required: true
   tf_actions_subcommand:
-    description: 'Terraform subcommand to execute.'
+    description: 'Terragrunt subcommand to execute.'
     required: true
   tf_actions_working_dir:
-    description: 'Terraform working directory.'
+    description: 'Terragrunt working directory.'
     default: '.'
   tf_actions_comment:
     description: 'Whether or not to comment on pull requests.'

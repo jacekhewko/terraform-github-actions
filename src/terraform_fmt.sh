@@ -9,7 +9,7 @@ function terraformFmt {
 
   # Gather the output of `terraform fmt`.
   echo "fmt: info: checking if Terraform files in ${tfWorkingDir} are correctly formatted"
-  fmtOutput=$(terraform fmt -check=true -write=false -diff ${fmtRecursive} ${*} 2>&1)
+  fmtOutput=$(terragrunt fmt -check=true -write=false -diff ${fmtRecursive} ${*} 2>&1)
   fmtExitCode=${?}
 
   # Exit code of 0 indicates success. Print the output and exit.
@@ -41,7 +41,7 @@ function terraformFmt {
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
     fmtComment=""
     for file in ${fmtFileList}; do
-      fmtFileDiff=$(terraform fmt -check=true -write=false -diff "${file}" | sed -n '/@@.*/,//{/@@.*/d;p}')
+      fmtFileDiff=$(terragrunt fmt -check=true -write=false -diff "${file}" | sed -n '/@@.*/,//{/@@.*/d;p}')
       fmtComment="${fmtComment}
 <details><summary><code>${tfWorkingDir}/${file}</code></summary>
 
@@ -53,7 +53,7 @@ ${fmtFileDiff}
 
     done
 
-    fmtCommentWrapper="#### \`terraform fmt\` Failed
+    fmtCommentWrapper="#### \`terragrunt fmt\` Failed
 ${fmtComment}
 
 *Workflow: \`${GITHUB_WORKFLOW}\`, Action: \`${GITHUB_ACTION}\`, Working Directory: \`${tfWorkingDir}\`*"

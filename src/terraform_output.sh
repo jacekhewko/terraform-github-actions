@@ -3,7 +3,7 @@
 function terraformOutput {
   # Gather the output of `terraform output`.
   echo "output: info: gathering all the outputs for the Terraform configuration in ${tfWorkingDir}"
-  outputOutput=$(terraform output -json ${*} 2>&1)
+  outputOutput=$(terragrunt output -json ${*} 2>&1)
   outputExitCode=${?}
 
   # Exit code of 0 indicates success. Print the output and exit.

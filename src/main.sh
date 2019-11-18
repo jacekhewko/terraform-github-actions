@@ -24,6 +24,13 @@ function parseInputs {
     exit 1
   fi
 
+  if [ "${INPUT_TG_ACTIONS_VERSION}" != "" ]; then
+    tgVersion=${INPUT_TG_ACTIONS_VERSION}
+  else
+    echo "Input terragrunt_version cannot be empty"
+    exit 1
+  fi
+
   if [ "${INPUT_TF_ACTIONS_SUBCOMMAND}" != "" ]; then
     tfSubcommand=${INPUT_TF_ACTIONS_SUBCOMMAND}
   else
@@ -44,10 +51,11 @@ function parseInputs {
 }
 
 function installTerraform {
-  url="https://releases.hashicorp.com/terraform/${tfVersion}/terraform_${tfVersion}_linux_amd64.zip"
+  urltf="https://releases.hashicorp.com/terraform/${tfVersion}/terraform_${tfVersion}_linux_amd64.zip"
+  urltg="https://github.com/gruntwork-io/terragrunt/releases/download/v${tgVersion}0.21.6/terragrunt_linux_amd64"
 
   echo "Downloading Terraform v${tfVersion}"
-  curl -s -S -L -o /tmp/terraform_${tfVersion} ${url}
+  curl -s -S -L -o /tmp/terraform_${tfVersion} ${urltf}
   if [ "${?}" -ne 0 ]; then
     echo "Failed to download Terraform v${tfVersion}"
     exit 1
@@ -61,6 +69,14 @@ function installTerraform {
     exit 1
   fi
   echo "Successfully unzipped Terraform v${tfVersion}"
+
+  echo "Downloading Terragrunt v${tgVersion}"
+  curl -s -S -L -o /tmp/terragrunt ${urltg}
+  if [ "${?}" -ne 0 ]; then
+    echo "Failed to download Terragrunt v${tgVersion}"
+    exit 1
+  fi
+  echo "Successfully downloaded Terragrunt v${tgVersion}"
 }
 
 function main {
