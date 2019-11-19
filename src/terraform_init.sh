@@ -3,7 +3,7 @@
 function terraformInit {
   # Gather the output of `terraform init`.
   if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
-    echo "init: info: initializing Terraform configuration in ${tfWorkingDir}"
+    echo "init: info: initializing Terragrunt configuration in ${tfWorkingDir}"
     initOutput=$(terragrunt init -input=false ${*} 2>&1)
     initExitCode=${?}
   else

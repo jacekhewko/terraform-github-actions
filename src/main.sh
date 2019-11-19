@@ -66,21 +66,24 @@ function installTerraform {
   fi
   echo "Successfully unzipped Terraform v${tfVersion}"
 
-  echo "Downloading Terragrunt v${tgVersion}"
-  curl -s -S -L -o /tmp/terragrunt ${urltg}
-  if [ "${?}" -ne 0 ]; then
-    echo "Failed to download Terragrunt v${tgVersion}"
-    exit 1
+  if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
+    echo "Downloading Terragrunt v${tgVersion}"
+    curl -s -S -L -o /tmp/terragrunt ${urltg}
+    if [ "${?}" -ne 0 ]; then
+      echo "Failed to download Terragrunt v${tgVersion}"
+      exit 1
+    fi
+    echo "Successfully downloaded Terragrunt v${tgVersion}"
+    echo "Moving Terragrunt v${tgVersion} to system PATH"
+    mv /tmp/terragrunt /usr/local/bin/ && chmod +x /usr/local/bin/terragrunt
+    if [ "${?}" -ne 0 ]; then
+      echo "Failed to move Terragrunt v${tgVersion} to system PATH"
+      exit 1
+    fi
+    echo "Successfully moved Terragrunt v${tgVersion} to system PATH"
+  else
+    echo "Skipping Terragrunt installation"
   fi
-  echo "Successfully downloaded Terragrunt v${tgVersion}"
-
-  echo "Moving Terragrunt v${tgVersion} to system PATH"
-  mv /tmp/terragrunt /usr/local/bin/ && chmod +x /usr/local/bin/terragrunt
-  if [ "${?}" -ne 0 ]; then
-    echo "Failed to move Terragrunt v${tgVersion} to system PATH"
-    exit 1
-  fi
-  echo "Successfully moved Terragrunt v${tgVersion} to system PATH"
 }
 
 function main {
