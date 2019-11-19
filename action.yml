@@ -1,6 +1,6 @@
 name: 'Terragrunt GitHub Actions'
 description: 'Wraps Terragrunt commands on HashiCorp's GitHub Actions.'
-author: 'HashiCorp, Inc. Terraform Team <terraform@hashicorp.com>'
+author: 'HashiCorp, Inc. Terraform Team <terraform@hashicorp.com> with custom Terragrunt modifications.'
 branding:
   icon: 'terminal'
   color: 'purple'
