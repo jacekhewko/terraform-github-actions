@@ -17,10 +17,13 @@ function hasPrefix {
 
 function parseInputs {
   # Required inputs
-  if [ "${INPUT_TF_ACTIONS_VERSION}" != "" ]; then
+  if [ "${INPUT_USE_TERRAGRUNT}" != "true" ] && [ "${INPUT_TF_ACTIONS_VERSION}" != "" ]; then
     tfVersion=${INPUT_TF_ACTIONS_VERSION}
+  elif [ "${INPUT_USE_TERRAGRUNT}" == "true" ] && [ "${INPUT_TG_ACTIONS_VERSION}" != "" ] && [ "${INPUT_TF_ACTIONS_VERSION}" != "" ]; then
+    tfVersion=${INPUT_TF_ACTIONS_VERSION}
+    tgVersion=${INPUT_TG_ACTIONS_VERSION}
   else
-    echo "Input terraform_version cannot be empty"
+    echo "At least one version input is missing"
     exit 1
   fi
 
@@ -44,10 +47,11 @@ function parseInputs {
 }
 
 function installTerraform {
-  url="https://releases.hashicorp.com/terraform/${tfVersion}/terraform_${tfVersion}_linux_amd64.zip"
+  urltf="https://releases.hashicorp.com/terraform/${tfVersion}/terraform_${tfVersion}_linux_amd64.zip"
+  urltg="https://github.com/gruntwork-io/terragrunt/releases/download/v${tgVersion}/terragrunt_linux_amd64"
 
   echo "Downloading Terraform v${tfVersion}"
-  curl -s -S -L -o /tmp/terraform_${tfVersion} ${url}
+  curl -s -S -L -o /tmp/terraform_${tfVersion} ${urltf}
   if [ "${?}" -ne 0 ]; then
     echo "Failed to download Terraform v${tfVersion}"
     exit 1
@@ -61,6 +65,25 @@ function installTerraform {
     exit 1
   fi
   echo "Successfully unzipped Terraform v${tfVersion}"
+
+  if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
+    echo "Downloading Terragrunt v${tgVersion}"
+    curl -s -S -L -o /tmp/terragrunt ${urltg}
+    if [ "${?}" -ne 0 ]; then
+      echo "Failed to download Terragrunt v${tgVersion}"
+      exit 1
+    fi
+    echo "Successfully downloaded Terragrunt v${tgVersion}"
+    echo "Moving Terragrunt v${tgVersion} to system PATH"
+    mv /tmp/terragrunt /usr/local/bin/ && chmod +x /usr/local/bin/terragrunt
+    if [ "${?}" -ne 0 ]; then
+      echo "Failed to move Terragrunt v${tgVersion} to system PATH"
+      exit 1
+    fi
+    echo "Successfully moved Terragrunt v${tgVersion} to system PATH"
+  else
+    echo "Skipping Terragrunt installation"
+  fi
 }
 
 function main {

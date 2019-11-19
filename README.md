@@ -1,10 +1,11 @@
-# Terraform GitHub Actions
-
+# Terragrunt GitHub Actions
 Terraform GitHub Actions allow you to execute Terraform commands within GitHub Actions.
+
+This has been modified with Terragrunt wrapper which allows you to run terragrunt commands on the same basics.
 
 The output of the actions can be viewed from the Actions tab in the main repository view. If the actions are executed on a pull request event, a comment may be posted on the pull request.
 
-Terraform GitHub Actions are a single GitHub Action that executes different Terraform subcommands depending on the content of the GitHub Actions YAML file.
+Terraform GitHub Actions are a single GitHub Action that executes different Terraform or Terragrunt subcommands depending on the content of the GitHub Actions YAML file.
 
 ## Success Criteria
 
@@ -12,7 +13,7 @@ An exit code of `0` is considered a successful execution.
 
 ## Usage
 
-The most common workflow is to run `terraform fmt`, `terraform init`, `terraform validate`, and `terraform plan` on all of the Terraform files in the root of the repository when a pull request is opened or updated. A comment will be posted to the pull request depending on the output of the Terraform subcommand being executed. This workflow can be configured by adding the following content to the GitHub Actions workflow YAML file.
+The most common workflow is to run `terraform fmt`, `terraform init`, `terraform validate`, and `terraform plan` on all of the Terraform files in the root of the repository when a pull request is opened or updated. You can also use `terragrunt` instead. A comment will be posted to the pull request depending on the output of the Terraform subcommand being executed. This workflow can be configured by adding the following content to the GitHub Actions workflow YAML file.
 
 ```yaml
 name: 'Terraform GitHub Actions'
@@ -29,6 +30,7 @@ jobs:
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.13
+          use_terragrunt: false
           tf_actions_subcommand: 'fmt'
           tf_actions_working_dir: '.'
           tf_actions_comment: true
@@ -38,6 +40,8 @@ jobs:
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.13
+          use_terragrunt: true
+          tg_actions_version: 0.21.6
           tf_actions_subcommand: 'init'
           tf_actions_working_dir: '.'
           tf_actions_comment: true
@@ -47,6 +51,8 @@ jobs:
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.13
+          use_terragrunt: true
+          tg_actions_version: 0.21.6
           tf_actions_subcommand: 'validate'
           tf_actions_working_dir: '.'
           tf_actions_comment: true
@@ -56,6 +62,8 @@ jobs:
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.13
+          use_terragrunt: true
+          tg_actions_version: 0.21.6
           tf_actions_subcommand: 'plan'
           tf_actions_working_dir: '.'
           tf_actions_comment: true
@@ -63,14 +71,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-This was a simplified example showing the basic features of these Terraform GitHub Actions. Please refer to the examples within the `examples` directory for other common workflows.
+This was a simplified example showing the basic features of these Terraform GitHub Actions. Please refer to the Hashicorp examples for other common workflows:
+https://github.com/hashicorp/terraform-github-actions/tree/master/examples
 
 ## Inputs
 
 Inputs configure Terraform GitHub Actions to perform different actions.
 
 * `tf_actions_version` - (Required) The Terraform version to install and execute.
-* `tf_actions_subcommand` - (Required) The Terraform subcommand to execute. Valid values are `fmt`, `init`, `validate`, `plan`, and `apply`.
+* `use_terragrunt` - (Required) Choose if terragrunt wrapper should be used. True or false.
+* `tg_actions_version` - (Required if `use_terragrunt` is set to true) Terragrunt version to install.
+* `tf_actions_subcommand` - (Required) The Terraform (or Terragrunt if `use_terragrunt` is set to true) subcommand to execute. Valid values are `fmt`, `init`, `validate`, `plan`, and `apply`.
 * `tf_actions_working_dir` - (Optional) The working directory to change into before executing Terraform subcommands. Defaults to `.` which means use the root of the GitHub repository.
 * `tf_actions_comment` - (Optional) Whether or not to comment on GitHub pull requests. Defaults to `true`.
 

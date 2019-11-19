@@ -2,9 +2,15 @@
 
 function terraformValidate {
   # Gather the output of `terraform validate`.
-  echo "validate: info: validating Terraform configuration in ${tfWorkingDir}"
-  validateOutput=$(terraform validate ${*} 2>&1)
-  validateExitCode=${?}
+  if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
+    echo "validate: info: validating Terragrunt configuration in ${tfWorkingDir}"
+    validateOutput=$(terragrunt validate ${*} 2>&1)
+    validateExitCode=${?}
+  else
+    echo "validate: info: validating Terraform configuration in ${tfWorkingDir}"
+    validateOutput=$(terraform validate ${*} 2>&1)
+    validateExitCode=${?}
+  fi
 
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${validateExitCode} -eq 0 ]; then
@@ -21,7 +27,7 @@ function terraformValidate {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
-    validateCommentWrapper="#### \`terraform validate\` Failed
+    validateCommentWrapper="#### \`terragrunt validate\` Failed
 
 \`\`\`
 ${validateOutput}

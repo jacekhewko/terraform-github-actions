@@ -2,9 +2,15 @@
 
 function terraformInit {
   # Gather the output of `terraform init`.
-  echo "init: info: initializing Terraform configuration in ${tfWorkingDir}"
-  initOutput=$(terraform init -input=false ${*} 2>&1)
-  initExitCode=${?}
+  if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
+    echo "init: info: initializing Terragrunt configuration in ${tfWorkingDir}"
+    initOutput=$(terragrunt init -input=false ${*} 2>&1)
+    initExitCode=${?}
+  else
+    echo "init: info: initializing Terraform configuration in ${tfWorkingDir}"
+    initOutput=$(terraform init -input=false ${*} 2>&1)
+    initExitCode=${?}
+  fi
 
   # Exit code of 0 indicates success. Print the output and exit.
   if [ ${initExitCode} -eq 0 ]; then
@@ -21,7 +27,7 @@ function terraformInit {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ]; then
-    initCommentWrapper="#### \`terraform init\` Failed
+    initCommentWrapper="#### \`terragrunt init\` Failed
 
 \`\`\`
 ${initOutput}

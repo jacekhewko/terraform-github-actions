@@ -2,11 +2,19 @@
 
 function terraformPlan {
   # Gather the output of `terraform plan`.
-  echo "plan: info: planning Terraform configuration in ${tfWorkingDir}"
-  planOutput=$(terraform plan -detailed-exitcode -input=false ${*} 2>&1)
-  planExitCode=${?}
-  planHasChanges=false
-  planCommentStatus="Failed"
+  if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
+    echo "plan: info: planning Terragrunt configuration in ${tfWorkingDir}"
+    planOutput=$(terragrunt plan -detailed-exitcode -input=false ${*} 2>&1)
+    planExitCode=${?}
+    planHasChanges=false
+    planCommentStatus="Failed"
+  else
+    echo "plan: info: planning Terraform configuration in ${tfWorkingDir}"
+    planOutput=$(terraform plan -detailed-exitcode -input=false ${*} 2>&1)
+    planExitCode=${?}
+    planHasChanges=false
+    planCommentStatus="Failed"
+  fi
 
   # Exit code of 0 indicates success with no changes. Print the output and exit.
   if [ ${planExitCode} -eq 0 ]; then
@@ -43,7 +51,7 @@ function terraformPlan {
 
   # Comment on the pull request if necessary.
   if [ "$GITHUB_EVENT_NAME" == "pull_request" ] && [ "${tfComment}" == "1" ] && ([ "${planHasChanges}" == "true" ] || [ "${planCommentStatus}" == "Failed" ]); then
-    planCommentWrapper="#### \`terraform plan\` ${planCommentStatus}
+    planCommentWrapper="#### \`terragrunt plan\` ${planCommentStatus}
 <details><summary>Show Output</summary>
 
 \`\`\`
