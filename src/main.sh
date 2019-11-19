@@ -52,7 +52,7 @@ function parseInputs {
 
 function installTerraform {
   urltf="https://releases.hashicorp.com/terraform/${tfVersion}/terraform_${tfVersion}_linux_amd64.zip"
-  urltg="https://github.com/gruntwork-io/terragrunt/releases/download/v${tgVersion}0.21.6/terragrunt_linux_amd64"
+  urltg="https://github.com/gruntwork-io/terragrunt/releases/download/v${tgVersion}/terragrunt_linux_amd64"
 
   echo "Downloading Terraform v${tfVersion}"
   curl -s -S -L -o /tmp/terraform_${tfVersion} ${urltf}
@@ -77,6 +77,14 @@ function installTerraform {
     exit 1
   fi
   echo "Successfully downloaded Terragrunt v${tgVersion}"
+
+  echo "Moving Terragrunt v${tgVersion} to system PATH"
+  sudo mv /tmp/terragrunt /usr/local/bin/
+  if [ "${?}" -ne 0 ]; then
+    echo "Failed to move Terragrunt v${tgVersion} to system PATH"
+    exit 1
+  fi
+  echo "Successfully moved Terragrunt v${tgVersion} to system PATH"
 }
 
 function main {
