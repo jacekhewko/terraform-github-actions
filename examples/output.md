@@ -18,6 +18,7 @@ jobs:
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.13
+          tg_actions_version: 0.21.6
           tf_actions_subcommand: 'outputs'
           tf_actions_working_dir: '.'
       - name: 'Use Terraform Output'

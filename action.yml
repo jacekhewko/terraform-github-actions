@@ -8,9 +8,11 @@ inputs:
   tf_actions_version:
     description: 'Terraform version to install.'
     required: true
-  tg_actions_version:
-    description: 'Terragrunt version to install.'
+  use_terragrunt:
+    description: 'Choose if use terraform or terragrunt. True or false.'
     required: true
+  tg_actions_version:
+    description: 'Terragrunt version to install. Required if use_terragrunt is true.'
   tf_actions_subcommand:
     description: 'Terragrunt subcommand to execute.'
     required: true

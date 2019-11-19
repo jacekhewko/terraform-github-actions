@@ -2,11 +2,19 @@
 
 function terraformPlan {
   # Gather the output of `terraform plan`.
-  echo "plan: info: planning Terraform configuration in ${tfWorkingDir}"
-  planOutput=$(terragrunt plan -detailed-exitcode -input=false ${*} 2>&1)
-  planExitCode=${?}
-  planHasChanges=false
-  planCommentStatus="Failed"
+  if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
+    echo "plan: info: planning Terraform configuration in ${tfWorkingDir}"
+    planOutput=$(terragrunt plan -detailed-exitcode -input=false ${*} 2>&1)
+    planExitCode=${?}
+    planHasChanges=false
+    planCommentStatus="Failed"
+  else
+    echo "plan: info: planning Terraform configuration in ${tfWorkingDir}"
+    planOutput=$(terraform plan -detailed-exitcode -input=false ${*} 2>&1)
+    planExitCode=${?}
+    planHasChanges=false
+    planCommentStatus="Failed"
+  fi
 
   # Exit code of 0 indicates success with no changes. Print the output and exit.
   if [ ${planExitCode} -eq 0 ]; then

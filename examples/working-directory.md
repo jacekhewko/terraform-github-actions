@@ -17,6 +17,7 @@ jobs:
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.13
+          tg_actions_version: 0.21.6
           tf_actions_subcommand: 'init'
           tf_actions_working_dir: '.'
           tf_actions_comment: true
@@ -41,6 +42,7 @@ jobs:
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.13
+          tg_actions_version: 0.21.6
           tf_actions_subcommand: 'init'
           tf_actions_working_dir: 'directory1'
           tf_actions_comment: true
@@ -56,6 +58,7 @@ jobs:
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.13
+          tg_actions_version: 0.21.6
           tf_actions_subcommand: 'init'
           tf_actions_working_dir: 'directory2'
           tf_actions_comment: true

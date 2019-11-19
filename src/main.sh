@@ -24,10 +24,10 @@ function parseInputs {
     exit 1
   fi
 
-  if [ "${INPUT_TG_ACTIONS_VERSION}" != "" ]; then
+  if [ "${INPUT_USE_TERRAGRUNT}" == "true" ] && [ "${INPUT_TG_ACTIONS_VERSION}" != "" ]; then
     tgVersion=${INPUT_TG_ACTIONS_VERSION}
   else
-    echo "Input terragrunt_version cannot be empty"
+    echo "Input terraform_version cannot be empty"
     exit 1
   fi
 
