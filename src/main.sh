@@ -79,7 +79,7 @@ function installTerraform {
   echo "Successfully downloaded Terragrunt v${tgVersion}"
 
   echo "Moving Terragrunt v${tgVersion} to system PATH"
-  mv /tmp/terragrunt /usr/local/bin/
+  mv /tmp/terragrunt /usr/local/bin/ && chmod +x /usr/local/bin/terragrunt
   if [ "${?}" -ne 0 ]; then
     echo "Failed to move Terragrunt v${tgVersion} to system PATH"
     exit 1
