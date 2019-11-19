@@ -1,5 +1,6 @@
-# Terraform GitHub Actions
+# Terragrunt GitHub Actions
 Terraform GitHub Actions allow you to execute Terraform commands within GitHub Actions.
+
 This has been modified with Terragrunt wrapper which allows you to run terragrunt commands on the same basics.
 
 The output of the actions can be viewed from the Actions tab in the main repository view. If the actions are executed on a pull request event, a comment may be posted on the pull request.
@@ -70,7 +71,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-This was a simplified example showing the basic features of these Terraform GitHub Actions. Please refer to the examples within the `examples` directory for other common workflows.
+This was a simplified example showing the basic features of these Terraform GitHub Actions. Please refer to the Hashicorp examples for other common workflows:
+https://github.com/hashicorp/terraform-github-actions/tree/master/examples
 
 ## Inputs
 
