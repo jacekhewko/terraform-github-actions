@@ -1,4 +1,4 @@
-name: 'Terragrunt'
+name: 'Terragrunt test'
 on:
   - pull_request
 jobs:
