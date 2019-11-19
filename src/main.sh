@@ -17,17 +17,13 @@ function hasPrefix {
 
 function parseInputs {
   # Required inputs
-  if [ "${INPUT_TF_ACTIONS_VERSION}" != "" ]; then
+  if [ "${INPUT_USE_TERRAGRUNT}" != "true" ] && [ "${INPUT_TF_ACTIONS_VERSION}" != "" ]; then
     tfVersion=${INPUT_TF_ACTIONS_VERSION}
-  else
-    echo "Input terraform_version cannot be empty"
-    exit 1
-  fi
-
-  if [ "${INPUT_USE_TERRAGRUNT}" == "true" ] && [ "${INPUT_TG_ACTIONS_VERSION}" == "" ]; then
+  elif [ "${INPUT_USE_TERRAGRUNT}" == "true" ] && [ "${INPUT_TG_ACTIONS_VERSION}" != "" ] && [ "${INPUT_TF_ACTIONS_VERSION}" != "" ]; then
+    tfVersion=${INPUT_TF_ACTIONS_VERSION}
     tgVersion=${INPUT_TG_ACTIONS_VERSION}
   else
-    echo "Input terragrunt_version cannot be empty"
+    echo "At least one version input is missing"
     exit 1
   fi
 
