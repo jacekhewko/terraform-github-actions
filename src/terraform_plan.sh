@@ -3,7 +3,7 @@
 function terraformPlan {
   # Gather the output of `terraform plan`.
   if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
-    echo "plan: info: planning Terraform configuration in ${tfWorkingDir}"
+    echo "plan: info: planning Terragrunt configuration in ${tfWorkingDir}"
     planOutput=$(terragrunt plan -detailed-exitcode -input=false ${*} 2>&1)
     planExitCode=${?}
     planHasChanges=false

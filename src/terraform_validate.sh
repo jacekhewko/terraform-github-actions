@@ -3,7 +3,7 @@
 function terraformValidate {
   # Gather the output of `terraform validate`.
   if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
-    echo "validate: info: validating Terraform configuration in ${tfWorkingDir}"
+    echo "validate: info: validating Terragrunt configuration in ${tfWorkingDir}"
     validateOutput=$(terragrunt validate ${*} 2>&1)
     validateExitCode=${?}
   else

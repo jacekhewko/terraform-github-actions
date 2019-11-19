@@ -3,7 +3,7 @@
 function terraformApply {
   # Gather the output of `terraform apply`.
   if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
-    echo "apply: info: applying Terraform configuration in ${tfWorkingDir}"
+    echo "apply: info: applying Terragrunt configuration in ${tfWorkingDir}"
     applyOutput=$(terragrunt apply -auto-approve -input=false ${*} 2>&1)
     applyExitCode=${?}
     applyCommentStatus="Failed"

@@ -3,7 +3,7 @@
 function terraformOutput {
   # Gather the output of `terraform output`.
   if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
-    echo "output: info: gathering all the outputs for the Terraform configuration in ${tfWorkingDir}"
+    echo "output: info: gathering all the outputs for the Terragrunt configuration in ${tfWorkingDir}"
     outputOutput=$(terragrunt output -json ${*} 2>&1)
     outputExitCode=${?}
   else
