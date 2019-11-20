@@ -67,8 +67,7 @@ function installTerraform {
 
   if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
     echo "Downloading Terragrunt v${tgVersion}"
-    curl -s -S -L -o /tmp/terragrunt ${urltg}
-    if [ "${?}" -ne 0 ]; then
+    if ! curl -s -S -L -o /tmp/terragrunt ${urltg}; then
       echo "Failed to download Terragrunt v${tgVersion}"
       exit 1
     fi
@@ -88,12 +87,12 @@ function installTerraform {
 function main {
   # Source the other files to gain access to their functions
   scriptDir=$(dirname ${0})
-  source ${scriptDir}/terraform_fmt.sh
-  source ${scriptDir}/terraform_init.sh
-  source ${scriptDir}/terraform_validate.sh
-  source ${scriptDir}/terraform_plan.sh
-  source ${scriptDir}/terraform_apply.sh
-  source ${scriptDir}/terraform_output.sh
+  source ${scriptDir}/terraform_fmt.sh || exit 1
+  source ${scriptDir}/terraform_init.sh || exit 1
+  source ${scriptDir}/terraform_validate.sh || exit 1
+  source ${scriptDir}/terraform_plan.sh || exit 1
+  source ${scriptDir}/terraform_apply.sh || exit 1
+  source ${scriptDir}/terraform_output.sh || exit 1
 
   parseInputs
   cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
