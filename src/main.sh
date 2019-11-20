@@ -51,8 +51,7 @@ function installTerraform {
   urltg="https://github.com/gruntwork-io/terragrunt/releases/download/v${tgVersion}/terragrunt_linux_amd64"
 
   echo "Downloading Terraform v${tfVersion}"
-  curl -s -S -L -o /tmp/terraform_${tfVersion} ${urltf}
-  if [ "${?}" -ne 0 ]; then
+  if ! curl -s -S -L -o /tmp/terraform_${tfVersion} ${urltf}; then
     echo "Failed to download Terraform v${tfVersion}"
     exit 1
   fi
@@ -102,27 +101,27 @@ function main {
   case "${tfSubcommand}" in
     fmt)
       installTerraform
-      terraformFmt ${*}
+      terraformFmt "${*}"
       ;;
     init)
       installTerraform
-      terraformInit ${*}
+      terraformInit "${*}"
       ;;
     validate)
       installTerraform
-      terraformValidate ${*}
+      terraformValidate "${*}"
       ;;
     plan)
       installTerraform
-      terraformPlan ${*}
+      terraformPlan "${*}"
       ;;
     apply)
       installTerraform
-      terraformApply ${*}
+      terraformApply "${*}"
       ;;
     output)
       installTerraform
-      terraformOutput ${*}
+      terraformOutput "${*}"
       ;;
     *)
       echo "Error: Must provide a valid value for terraform_subcommand"
