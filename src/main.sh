@@ -51,8 +51,7 @@ function installTerraform {
   urltg="https://github.com/gruntwork-io/terragrunt/releases/download/v${tgVersion}/terragrunt_linux_amd64"
 
   echo "Downloading Terraform v${tfVersion}"
-  curl -s -S -L -o /tmp/terraform_${tfVersion} ${urltf}
-  if [ "${?}" -ne 0 ]; then
+  if ! curl -s -S -L -o /tmp/terraform_${tfVersion} ${urltf}; then
     echo "Failed to download Terraform v${tfVersion}"
     exit 1
   fi
@@ -68,8 +67,7 @@ function installTerraform {
 
   if [ "${INPUT_USE_TERRAGRUNT}" == "true" ]; then
     echo "Downloading Terragrunt v${tgVersion}"
-    curl -s -S -L -o /tmp/terragrunt ${urltg}
-    if [ "${?}" -ne 0 ]; then
+    if ! curl -s -S -L -o /tmp/terragrunt ${urltg}; then
       echo "Failed to download Terragrunt v${tgVersion}"
       exit 1
     fi
@@ -89,12 +87,12 @@ function installTerraform {
 function main {
   # Source the other files to gain access to their functions
   scriptDir=$(dirname ${0})
-  source ${scriptDir}/terraform_fmt.sh
-  source ${scriptDir}/terraform_init.sh
-  source ${scriptDir}/terraform_validate.sh
-  source ${scriptDir}/terraform_plan.sh
-  source ${scriptDir}/terraform_apply.sh
-  source ${scriptDir}/terraform_output.sh
+  source ${scriptDir}/terraform_fmt.sh || exit 1
+  source ${scriptDir}/terraform_init.sh || exit 1
+  source ${scriptDir}/terraform_validate.sh || exit 1
+  source ${scriptDir}/terraform_plan.sh || exit 1
+  source ${scriptDir}/terraform_apply.sh || exit 1
+  source ${scriptDir}/terraform_output.sh || exit 1
 
   parseInputs
   cd ${GITHUB_WORKSPACE}/${tfWorkingDir}
@@ -102,27 +100,27 @@ function main {
   case "${tfSubcommand}" in
     fmt)
       installTerraform
-      terraformFmt ${*}
+      terraformFmt "${*}"
       ;;
     init)
       installTerraform
-      terraformInit ${*}
+      terraformInit "${*}"
       ;;
     validate)
       installTerraform
-      terraformValidate ${*}
+      terraformValidate "${*}"
       ;;
     plan)
       installTerraform
-      terraformPlan ${*}
+      terraformPlan "${*}"
       ;;
     apply)
       installTerraform
-      terraformApply ${*}
+      terraformApply "${*}"
       ;;
     output)
       installTerraform
-      terraformOutput ${*}
+      terraformOutput "${*}"
       ;;
     *)
       echo "Error: Must provide a valid value for terraform_subcommand"
